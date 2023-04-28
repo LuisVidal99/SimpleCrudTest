@@ -42,8 +42,8 @@ export function useTokenVerification(
 ) {
 	const verification = async (token: string) => {
 		await verifyUser(token);
-		const { token: newToken } = await refreshUser(token);
-		return newToken;
+		const { token: newToken, pk: userID } = await refreshUser(token);
+		return JSON.stringify({ newToken, userID });
 	};
 
 	const { mutate: verifyToken, status: verifing } = useMutation(verification, {
