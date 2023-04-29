@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useContext, useEffect, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import {
 	calendarIcon,
 	discIcon,
@@ -9,6 +9,8 @@ import {
 } from '../../../../assets/Icons';
 import { UserContext } from '../../../../contexts/autentification';
 import usePostTask from '../../../../hooks/post-task.hook';
+import { TasksContext } from '../../Context/tasks.context';
+import { Task } from '../../Services/task.service';
 import { AddTaskContext } from '../context/AddTasksContext';
 import TaskMenuButton from './ButtonTaskList';
 
@@ -25,11 +27,17 @@ function TaskMenu() {
 	const { userId } = useContext(UserContext);
 	const [Text, SetText] = useContext(AddTaskContext).InputText;
 	const [showMenu, SetMenu] = useContext(AddTaskContext).MenuDisplay;
+	const { tasks, setTasks } = useContext(TasksContext);
 
 	/**
 	 * * requests
 	 */
-	const post = usePostTask();
+	const post = usePostTask({
+		onSuccess() {},
+		onError() {
+			setTasks((value) => value.slice(1));
+		},
+	});
 
 	/**
 	 * * Logic
@@ -72,9 +80,19 @@ function TaskMenu() {
 	};
 
 	// TODO refrescar el query "getTasks"
-	const handleOK = () => {
+	const handleOK = useCallback(() => {
+		const date = new Date().toISOString();
+		const task: Task = {
+			created_at: date,
+			id: tasks[0].id + 1,
+			insert_by: userId,
+			task: Text,
+			updated_at: date,
+			user_name: 'test',
+		};
+		setTasks((value) => [task].concat(value));
 		post({ task: Text, insert_by: userId });
-	};
+	}, [Text, post, setTasks, tasks, userId]);
 
 	/**
 	 * * Render

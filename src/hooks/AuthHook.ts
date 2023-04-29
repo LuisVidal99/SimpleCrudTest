@@ -5,7 +5,7 @@ import {
 	refreshUser,
 	TokenResponse,
 	verifyUser,
-} from '../api/LoguinApi';
+} from '../components/Login/Services/login.service';
 
 export function useAuth(
 	success?: (data: TokenResponse) => void,

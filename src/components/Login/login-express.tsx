@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { InferType, object, string } from 'yup';
-import { TokenResponse } from '../../api/LoguinApi';
+import { TokenResponse } from './Services/login.service';
 import { UserContext } from '../../contexts/autentification';
 import { useAuth } from '../../hooks/AuthHook';
 import TextInput, { InputTypes } from './form-inputs/text-input';
@@ -39,6 +39,7 @@ export default function LoguinExpress() {
 	// ? handle request
 	function authSuccess({ token, pk }: TokenResponse) {
 		if (remember) localStorage.setItem('token', token);
+		sessionStorage.setItem('token', token);
 		setUserId(pk);
 	}
 	const { authUser } = useAuth(authSuccess);

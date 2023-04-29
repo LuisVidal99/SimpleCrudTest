@@ -1,9 +1,10 @@
 import { AgGridReact } from 'ag-grid-react';
 
+import { useQuery } from '@tanstack/react-query';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
+import { TasksContext } from './Context/tasks.context';
 import { getTasks } from './Services/task.service';
 
 function TasksList() {
@@ -18,21 +19,28 @@ function TasksList() {
 		[]
 	);
 
-	const Tasks = useQuery(['getTasks'], getTasks);
-	return Tasks.isSuccess ? (
-		<div className="ag-theme-alpine my-1 p-10 h-[600px] w-full">
-			<AgGridReact
-				defaultColDef={{
-					flex: 1,
-					minWidth: 100,
-				}}
-				rowData={Tasks.data.results}
-				columnDefs={columns}
-			/>
-		</div>
-	) : (
-		<h1>Fetching Tasks....</h1>
-	);
+	const { tasks, setTasks } = useContext(TasksContext);
+
+	const Tasks = useQuery(['getTasks'], getTasks, {
+		onSuccess(data) {
+			setTasks(data.results);
+		},
+	});
+
+	if (Tasks.isSuccess)
+		return (
+			<div className="ag-theme-alpine my-1 p-10 h-[600px] w-full">
+				<AgGridReact
+					defaultColDef={{
+						flex: 1,
+						minWidth: 100,
+					}}
+					rowData={tasks}
+					columnDefs={columns}
+				/>
+			</div>
+		);
+	return <div />;
 }
 
 export default TasksList;

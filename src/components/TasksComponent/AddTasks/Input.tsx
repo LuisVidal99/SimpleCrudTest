@@ -1,4 +1,4 @@
-import { SyntheticEvent, useContext, useEffect, useRef, useState } from 'react';
+import { SyntheticEvent, useContext, useEffect, useRef } from 'react';
 
 import { minorSquereIcon, plusSquareIcon } from '../../../assets/Icons';
 import { handleInputWriting } from '../../_utils';

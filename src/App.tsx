@@ -14,6 +14,7 @@ export default function App() {
 	function successVerification(userData: string) {
 		const { userID, newToken } = JSON.parse(userData);
 		localStorage.token = newToken;
+		sessionStorage.token = newToken;
 		setUserId(userID);
 		setContent(<Tasks />);
 	}
@@ -24,7 +25,6 @@ export default function App() {
 	});
 
 	useEffect(() => {
-		console.log(userId);
 		if (localToken !== null) verifyToken(localToken);
 		else if (userId === -1) setContent(<LoguinExpress />);
 		else setContent(<Tasks />);
