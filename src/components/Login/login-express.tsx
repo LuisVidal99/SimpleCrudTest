@@ -62,7 +62,7 @@ export default function LoguinExpress() {
 	return (
 		<div className="fixed w-full h-full  bg-blue-300 flex justify-center">
 			<form
-				className="bg-white rounded-xl self-center px-4 pb-3 w-96"
+				className="action-form bg-white rounded-xl self-center px-4 pb-3 w-96"
 				onSubmit={handleSubmit(handleSubmitForm)}
 			>
 				<div className="w-full">
